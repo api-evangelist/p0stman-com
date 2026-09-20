@@ -1,0 +1,79 @@
+generated: '2026-09-19'
+method: probed
+source: https://p0stman.com/.well-known/agent-card.json
+description: >-
+  A2A Agent Card for "Zero", the assistant p0stman (Thrive Venture Labs Ltd, trading as p0stman, Norfolk /
+  London, UK) serves from its own host. The identical body (same ETag cc05f050a98844045d088bfb6708cae4,
+  1,456 bytes) is served at the canonical /.well-known/agent-card.json, the legacy /.well-known/agent.json,
+  on both p0stman.com and www.p0stman.com, and again as the GET response of the task endpoint itself,
+  https://p0stman.com/api/agent. Provider-published by construction: the body is saved verbatim and nothing
+  here is derived or generated. Grade is measured against the A2A 1.0.0 AgentCard object - conformant passes
+  every structural check, near-conformant is correctly shaped but omits optional fields, flavored fails a
+  hard check. This card is flavored: capabilities is an object and skills is an array, but there is no
+  protocolVersion, and authentication uses the pre-0.3 schemes[] shape ("None") instead of securitySchemes.
+  The first-party source repository github.com/paulgosnell/zero-agent holds the same card (one word differs
+  in the description: "AI ops assistant" there, "AI assistant" live).
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: p0stman.com
+  also_served_at:
+  - {url: https://p0stman.com/.well-known/agent.json, status: 200, note: legacy pre-0.3 path, byte-identical}
+  - {url: https://www.p0stman.com/.well-known/agent-card.json, status: 200, note: byte-identical}
+  - {url: https://www.p0stman.com/.well-known/agent.json, status: 200, note: byte-identical}
+  - {url: https://p0stman.com/api/agent, status: 200, note: GET on the task endpoint returns the card; POST is the A2A JSON-RPC surface}
+  negative_control: /.well-known/p0stman-negative-control-7f3ab91c.json returned 404 on both hosts, so the 200s are real routes and not an SPA catch-all
+conformance:
+  spec: A2A 1.0.0
+  grade: flavored
+  protocol_version: null
+  preferred_transport: null
+  deviations:
+  - no-protocolVersion
+  - authentication.schemes-instead-of-securitySchemes
+  - no-preferredTransport
+  - no-additionalInterfaces
+  - version-is-1.0-not-semver
+  checks:
+    capabilities_is_object: true
+    protocolVersion_present: false
+    skills_is_array: true
+    defaultInputModes_present: true
+    defaultOutputModes_present: true
+    provider_present: true
+card:
+  name: Zero
+  description: >-
+    AI assistant at p0stman - an AI-native product studio in Norfolk, UK. Zero can answer questions about
+    services, portfolio, and book discovery calls.
+  url: https://p0stman.com/api/agent
+  version: '1.0'
+  provider: p0stman (https://p0stman.com)
+  authentication: none (authentication.schemes = [None])
+  capabilities: {streaming: false, pushNotifications: false, stateTransitionHistory: false}
+  default_input_modes: [text/plain]
+  default_output_modes: [text/plain]
+  skills: 3
+  skill_ids: [inquire, portfolio, book]
+  skill_names: [Agency Inquiry, Portfolio Research, Book Discovery Call]
+  file: p0stman-com-agent-card.json
+task_endpoint:
+  url: https://p0stman.com/api/agent
+  transport: JSON-RPC 2.0 over HTTPS POST (per the provider's site footer "A2A JSON-RPC 2.0")
+  cors: 'access-control-allow-origin: *; methods GET, POST, OPTIONS'
+  observed: >-
+    POST {"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"does-not-exist"}} returned HTTP 400 with
+    {"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"Missing task text in params.message.parts[0].text"}}
+    - the endpoint expects a message/send-shaped params.message.parts[0].text and does not implement task
+    queries, consistent with capabilities.stateTransitionHistory=false. No message/send was sent, because
+    the "book" skill schedules a real discovery call with a real person.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://p0stman.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  etag: '"cc05f050a98844045d088bfb6708cae4"'
+  content_length: 1456
+  server: Vercel
+  cache_control: public, max-age=0, must-revalidate
+  note: Verbatim body saved alongside this manifest. No field inferred.

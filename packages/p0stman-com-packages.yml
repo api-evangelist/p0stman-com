@@ -1,0 +1,29 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  registry.npmjs.org search "p0stman" (0 results), pypi.org/pypi/p0stman/json (404), api.github.com/orgs/p0stman
+  (404), api.github.com/users/paulgosnell (44 public repos), api.github.com/search/repositories?q=p0stman,
+  https://p0stman.com/agents.md and https://p0stman.com/llms.txt - all 2026-09-19.
+package_count: 0
+official_sdk_count: 0
+summary: >-
+  p0stman publishes no client library, SDK or CLI for its agent surface, and needs none: agents.md's
+  integration path is a raw JSON-RPC POST to /api/mcp or a GET to the /api/ai endpoints. There is no p0stman
+  GitHub organisation; the founder's personal account (github.com/paulgosnell) holds the first-party
+  zero-agent repository, which contains only the A2A agent-card.json (no code, last pushed 2026-03-25), and
+  an MCP server for a separate venture (accountsos-mcp, homepage accounts-os.com). Nothing on npm or PyPI
+  carries the name. The GitHub search hits for "p0stman" are unrelated third-party repositories that
+  misspell Postman.
+packages: []
+first_party_repositories:
+- name: zero-agent
+  url: https://github.com/paulgosnell/zero-agent
+  description: 'Zero - AI ops assistant at p0stman.com. A2A AgentCard.'
+  contents: agent-card.json only
+  pushed: '2026-03-25'
+  registry: null
+  version: null
+  published: null
+  note: Source of the A2A card served at /.well-known/agent-card.json (live description differs by one word). Not a package; recorded so the provenance of the card is traceable.
+not_first_party:
+- {name: accountsos-mcp, url: https://github.com/paulgosnell/accountsos-mcp, note: MCP server for AccountsOS (accounts-os.com), a p0stman-built venture with its own domain; not a p0stman.com surface}

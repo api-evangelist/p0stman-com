@@ -1,18 +1,128 @@
 aid: p0stman-com
 name: p0stman
-description: 'p0stman is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  p0stman is an AI-native product studio operated by Thrive Venture Labs Ltd (Norfolk and London, UK),
+  founded by Paul Gosnell. It builds AI voice agents, AI automation, operations command centres, rapid MVPs
+  and "agentic web readiness" rebuilds for clients at fixed prices from £1,500-£8,000, and it uses its own
+  site as the demonstration: p0stman.com serves a live anonymous MCP server at /api/mcp (five tools, JSON-RPC
+  2.0, protocol 2024-11-05), an A2A agent card for its assistant "Zero" at /.well-known/agent-card.json with
+  a task endpoint at /api/agent, machine-readable JSON at /api/ai/context, /api/ai/services and
+  /api/ai/portfolio, plus llms.txt, agents.md, context.md and a root mcp.json manifest. No OpenAPI, SDK,
+  OAuth surface or developer sign-up is published - the whole API is free, anonymous and read-mostly, with two
+  write tools that book a discovery call or send an enquiry. Not the Postman API platform.
+image: https://p0stman.com/icon-512.png
 url: https://raw.githubusercontent.com/api-evangelist/p0stman-com/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: 'enrichment pass 2026-09-19: full contract discovery run; live remote MCP server (5 tools with inputSchema), A2A agent card at both canonical and legacy paths plus a JSON-RPC task endpoint, llms.txt, agents.md and JSON context endpoints found on p0stman.com; no OpenAPI, SDK or OAuth surface exists'
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+- AI Agents
+- MCP
+- A2A
+- Agentic Web
+- Voice AI
+- AI Automation
+- Product Studio
+- Software Development
+- Consulting
+- United Kingdom
+apis:
+- aid: p0stman-com:p0stman-mcp-server
+  name: p0stman MCP Server
+  description: >-
+    Live, anonymous, remote Model Context Protocol server at https://p0stman.com/api/mcp (JSON-RPC 2.0 over
+    HTTPS POST, protocol 2024-11-05, tools primitive only). Five tools: get_services (services with GBP
+    "from" prices and timelines), get_portfolio (case studies, filterable by industry), search_content
+    (guides and pages), and two writes - book_discovery_call and submit_inquiry - that send a real enquiry to
+    the founder. No authentication, no rate limit published, no idempotency or reversal path on the writes.
+    Documented in agents.md with a JSON-RPC example per tool; advertised in llms.txt, context.md and
+    /mcp.json; robots.txt explicitly allows the path.
+  image: https://p0stman.com/icon-512.png
+  humanURL: https://p0stman.com/agents.md
+  baseURL: https://p0stman.com/api/mcp
+  tags:
+  - MCP
+  - AI Agents
+  - JSON-RPC
+  - Services
+  - Portfolio
+  properties:
+  - type: Documentation
+    url: https://p0stman.com/agents.md
+  - type: MCPServer
+    url: mcp/p0stman-com-mcp.yml
+  - type: Authentication
+    url: authentication/p0stman-com-authentication.yml
+  - type: Conventions
+    url: conventions/p0stman-com-conventions.yml
+  - type: ErrorCatalog
+    url: errors/p0stman-com-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/p0stman-com-rate-limits.yml
+  - type: Conformance
+    url: conformance/p0stman-com-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/p0stman-com-lifecycle.yml
+  overlays: []
+- aid: p0stman-com:zero-a2a-agent
+  name: Zero A2A Agent
+  description: >-
+    p0stman's agent-to-agent surface: an A2A agent card for "Zero" served at /.well-known/agent-card.json
+    (and the legacy /.well-known/agent.json) on p0stman.com and www.p0stman.com, pointing at an anonymous
+    JSON-RPC 2.0 task endpoint at https://p0stman.com/api/agent. Three skills - inquire (services, pricing,
+    capabilities), portfolio (case studies by industry) and book (schedule a 30-minute discovery call with
+    Paul Gosnell) - text/plain in and out, no streaming, push notifications or task history. The card is
+    flavored against A2A 1.0.0 (no protocolVersion, pre-0.3 authentication.schemes).
+  image: https://p0stman.com/icon-512.png
+  humanURL: https://p0stman.com/what-is-a2a-protocol
+  baseURL: https://p0stman.com/api/agent
+  tags:
+  - A2A
+  - AI Agents
+  - JSON-RPC
+  - Booking
+  properties:
+  - type: Documentation
+    url: https://p0stman.com/agents.md
+  - type: AgentCard
+    url: a2a/p0stman-com-a2a.yml
+  - type: Authentication
+    url: authentication/p0stman-com-authentication.yml
+  - type: Conventions
+    url: conventions/p0stman-com-conventions.yml
+  - type: ErrorCatalog
+    url: errors/p0stman-com-problem-types.yml
+  - type: Conformance
+    url: conformance/p0stman-com-conformance.yml
+  overlays: []
+- aid: p0stman-com:p0stman-ai-context-api
+  name: p0stman AI Context API
+  description: >-
+    Three anonymous JSON endpoints documented in agents.md for agents that do not speak MCP: GET
+    /api/ai/context (company, services, case_studies, contact, how_to_engage, mcp_endpoint), GET
+    /api/ai/services (services with slug, price_from, currency, timeline, url and subOffers) and GET
+    /api/ai/portfolio (case studies with slug, title, industry, summary, tech, timeline, url). Read-only,
+    CORS-open, no OpenAPI published - the response shapes are described in prose only.
+  image: https://p0stman.com/icon-512.png
+  humanURL: https://p0stman.com/agents.md
+  baseURL: https://p0stman.com/api/ai
+  tags:
+  - JSON
+  - AI Agents
+  - Services
+  - Portfolio
+  properties:
+  - type: Documentation
+    url: https://p0stman.com/agents.md
+  - type: Authentication
+    url: authentication/p0stman-com-authentication.yml
+  - type: Conventions
+    url: conventions/p0stman-com-conventions.yml
+  overlays: []
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,3 +131,68 @@ maintainers:
 common:
 - type: Website
   url: https://p0stman.com/
+- type: Documentation
+  url: https://p0stman.com/agents.md
+- type: GettingStarted
+  url: https://p0stman.com/agents.md
+- type: Support
+  url: https://p0stman.com/contact
+- type: Contact
+  url: https://p0stman.com/contact
+- type: Pricing
+  url: https://p0stman.com/pricing
+- type: Blog
+  url: https://p0stman.com/guides
+- type: Leadership
+  url: https://p0stman.com/paulgosnell
+- type: TermsOfService
+  url: https://p0stman.com/terms
+- type: PrivacyPolicy
+  url: https://p0stman.com/privacy
+- type: Sitemap
+  url: https://p0stman.com/sitemap.xml
+- type: SourceCode
+  url: https://github.com/paulgosnell/zero-agent
+- type: LinkedIn
+  url: https://linkedin.com/in/pgosnell
+- type: Twitter
+  url: https://x.com/paulgosnell
+- type: LLMsTxt
+  url: llms/p0stman-com-llms.txt
+- type: AgentsMd
+  url: llms/p0stman-com-agents.md
+- type: WellKnown
+  url: well-known/p0stman-com-well-known.yml
+- type: AgentCard
+  url: a2a/p0stman-com-a2a.yml
+- type: MCPServer
+  url: mcp/p0stman-com-mcp.yml
+- type: Authentication
+  url: authentication/p0stman-com-authentication.yml
+- type: Conventions
+  url: conventions/p0stman-com-conventions.yml
+- type: ErrorCatalog
+  url: errors/p0stman-com-problem-types.yml
+- type: RateLimits
+  url: rate-limits/p0stman-com-rate-limits.yml
+- type: Plans
+  url: plans/p0stman-com-plans-pricing.yml
+- type: Conformance
+  url: conformance/p0stman-com-conformance.yml
+- type: Lifecycle
+  url: lifecycle/p0stman-com-lifecycle.yml
+- type: Packages
+  url: packages/p0stman-com-packages.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/p0stman-com-domain-security.yml
+- type: RegulatoryPosture
+  url: regulatory/p0stman-com-regulatory-posture.yml
+- type: DataSubjectRequest
+  url: https://p0stman.com/privacy
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 21
+  pass: local-v3

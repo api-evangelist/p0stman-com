@@ -1,0 +1,109 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://p0stman.com/.well-known/agent-card.json, https://p0stman.com/.well-known/agent.json, POST
+  https://p0stman.com/api/mcp (initialize, tools/list, tools/call, resources/list, prompts/list, ping),
+  https://p0stman.com/mcp.json, https://p0stman.com/llms.txt, https://p0stman.com/agents.md,
+  https://p0stman.com/context.md, https://p0stman.com/robots.txt, https://p0stman.com/privacy and the
+  /.well-known/ probe in well-known/p0stman-com-well-known.yml - all fetched 2026-09-19.
+description: >-
+  What p0stman's agent surface actually conforms to. The company sells "agentic web readiness" and has built
+  its own site as the demonstration: the four-layer stack it markets (discovery files, JSON comprehension
+  endpoints, an MCP server, an A2A card and task endpoint) is all live on p0stman.com. There is no REST API
+  contract, no OAuth surface and no event surface, so the cross-cutting API standards (OpenAPI, OAuth 2.0,
+  OIDC, RFC 9457, pagination, idempotency) are recorded as not applicable or not conforming rather than
+  omitted. No domain standard for the company's market (software services) exists to declare.
+standards:
+- id: mcp
+  conforms: true
+  protocol_version: '2024-11-05'
+  evidence: >-
+    POST https://p0stman.com/api/mcp initialize returned protocolVersion 2024-11-05, serverInfo {p0stman MCP
+    Server 1.0.0}, capabilities {tools: {}}; tools/list returned 5 tools each with a JSON Schema inputSchema;
+    tools/call get_services returned a content[] text block. resources/list, prompts/list and ping return
+    JSON-RPC -32601, so only the tools primitive is implemented. Anonymous, CORS *, plain JSON (no SSE, no
+    Mcp-Session-Id). See mcp/p0stman-com-mcp.yml.
+- id: mcp-streamable-http
+  conforms: false
+  evidence: >-
+    The endpoint speaks JSON-RPC over POST and answers GET with a static descriptor rather than an SSE
+    stream; it declares the 2024-11-05 protocol revision, which predates Streamable HTTP (2025-03-26). A
+    client that requires SSE or session headers will not get them; a client that POSTs JSON-RPC will.
+- id: a2a-agent-card
+  conforms: true
+  grade: flavored
+  evidence: >-
+    AgentCard served at the canonical /.well-known/agent-card.json AND the legacy /.well-known/agent.json on
+    p0stman.com and www.p0stman.com (200, application/json, byte-identical). capabilities is an object and
+    skills is an array (3 skills), defaultInputModes/defaultOutputModes present, but no protocolVersion and
+    authentication uses the pre-0.3 schemes[] shape - hence flavored. See a2a/p0stman-com-a2a.yml.
+- id: a2a-jsonrpc-endpoint
+  conforms: true
+  evidence: >-
+    https://p0stman.com/api/agent answers POST with JSON-RPC 2.0 envelopes (observed a -32602 error naming
+    params.message.parts[0].text for a request without a message) and GET with the card. message/send was
+    not exercised because the card's "book" skill schedules a real call; tasks/get is not implemented,
+    consistent with stateTransitionHistory=false.
+- id: llms-txt
+  conforms: true
+  evidence: >-
+    /llms.txt (200, text/plain, 9,512 bytes, Last-Modified 2026-09-10) in llmstxt.org format - H1,
+    blockquote summary, H2 link sections, an "Optional" section - naming the MCP endpoint, the AI context
+    endpoints, the sitemap and agents.md. Saved verbatim to llms/p0stman-com-llms.txt.
+- id: agents-md
+  conforms: true
+  evidence: >-
+    /agents.md (200, text/markdown, 5,141 bytes) documents the MCP endpoint and every tool with a JSON-RPC
+    example, the three /api/ai JSON endpoints, the WebMCP form annotations, the JSON-LD types per page,
+    indexing preferences and a preferred citation. Saved verbatim to llms/p0stman-com-agents.md.
+- id: webmcp
+  conforms: null
+  evidence: >-
+    agents.md and the site footer claim WebMCP - data-mcp-tool="submit_inquiry" / data-mcp-field attributes on
+    the /contact form and imperative navigator.modelContext registration of 5 tools in Chrome 146+. Recorded
+    as a provider claim; no browser-side verification was performed and no /.well-known/webmcp.json exists.
+- id: robots-txt-ai-crawler-policy
+  conforms: true
+  evidence: >-
+    /robots.txt carries explicit Allow: /api/mcp and Allow: /api/ai/ plus named Allow rules for GPTBot,
+    OAI-SearchBot, ChatGPT-User, ClaudeBot, anthropic-ai, claude-web, PerplexityBot, Perplexity-User,
+    TavilyBot, YouBot, DuckAssistBot, Google-Extended, Applebot, Amazonbot, cohere-ai and MistralAI-User, and
+    agents.md states "Training data use: permitted with attribution".
+- id: schema-org-json-ld
+  conforms: true
+  evidence: >-
+    agents.md declares Organization + WebSite on the homepage, Service/CaseStudy/Article/FAQPage/ContactPage/
+    LocalBusiness/Person by page type; the homepage HTML fetched 2026-09-19 is server-rendered Next.js with
+    inline application/ld+json.
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document is published: /openapi.json, /openapi.yaml, /swagger.json,
+    /api/openapi.json, /v1/openapi.json, /api-docs, /docs and /redoc all return the site 404 on both hosts.
+    The three /api/ai JSON endpoints are documented in prose in agents.md only. Not derived - see
+    Never fabricate.
+- id: oauth2
+  conforms: false
+  applicable: false
+  evidence: The MCP server and A2A endpoint are anonymous (card authentication.schemes = [None]); /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource return 404.
+- id: oidc
+  conforms: false
+  applicable: false
+  evidence: /.well-known/openid-configuration returns 404 on both hosts; no login surface exists on the site.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt and /security.txt return 404 on both hosts.
+- id: rfc9457
+  conforms: false
+  applicable: false
+  evidence: Errors are JSON-RPC 2.0 error objects (-32601, -32602, -32603), not application/problem+json. See errors/p0stman-com-problem-types.yml.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency key or replay semantics are documented for book_discovery_call or submit_inquiry; a retried call is a second enquiry. See conventions/p0stman-com-conventions.yml.
+- id: pagination
+  conforms: false
+  applicable: false
+  evidence: Every read returns the full collection (services, case studies, search hits) in one text block; no cursor or page parameters exist in any inputSchema.
+domain_standard:
+  applicable: false
+  note: p0stman is a software product studio; no sector interchange standard (SCIM, OData, OpenRTB, FHIR, LTI, etc.) applies to its market, and none is declared. Reward-only check - nothing is asserted.

@@ -1,0 +1,46 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://p0stman.com/agents.md, https://p0stman.com/llms.txt, https://p0stman.com/context.md, POST
+  https://p0stman.com/api/mcp initialize, https://p0stman.com/mcp.json, and live probes of /status,
+  /changelog and /roadmap on 2026-09-19.
+summary: >-
+  p0stman publishes no versioning policy, deprecation policy, changelog, roadmap or status page for its
+  agent surface. The only version signals are self-declared strings - MCP serverInfo.version 1.0.0 with
+  protocolVersion 2024-11-05, mcp.json version 1.0.0, and the A2A card version "1.0" - and the dated
+  freshness markers on the discovery files (llms.txt and agents.md both say "Last updated: 2026-06-19";
+  llms.txt's Last-Modified header is 2026-09-10; the zero-agent GitHub repo was last pushed 2026-03-25).
+  The MCP protocol revision the server declares (2024-11-05) is two revisions behind the current
+  specification, which is the one lifecycle fact an integrator needs.
+versioning:
+  policy: null
+  scheme: none published
+  current:
+    mcp_server: 1.0.0
+    mcp_protocol: '2024-11-05'
+    a2a_card: '1.0'
+    mcp_manifest: 1.0.0
+deprecation:
+  policy: null
+  headers: none (no Deprecation or Sunset header observed)
+  deprecated_operations: []
+status_page:
+  url: null
+  probed: [{url: https://p0stman.com/status, status: 404}]
+changelog:
+  url: null
+  probed: [{url: https://p0stman.com/changelog, status: 404}]
+  note: >-
+    The site's "Agentic Web Rebuild" case study (https://p0stman.com/case-study/postman-agentic-web) narrates
+    the migration from a Vite SPA to Next.js with the four-layer agent stack - a one-off narrative, not a
+    dated changelog.
+roadmap:
+  url: null
+  probed: [{url: https://p0stman.com/roadmap, status: 404}]
+sla: null
+freshness:
+  llms_txt_last_updated: '2026-06-19'
+  llms_txt_last_modified_header: '2026-09-10'
+  agents_md_last_updated: '2026-06-19'
+  privacy_terms_last_updated: '2025-08-19'
+  zero_agent_repo_pushed: '2026-03-25'

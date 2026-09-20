@@ -1,0 +1,117 @@
+generated: '2026-09-19'
+method: searched
+status: published
+source: https://p0stman.com/api/mcp
+manifest_source: https://p0stman.com/mcp.json
+docs: https://p0stman.com/agents.md
+llms_source: https://p0stman.com/llms.txt
+description: >-
+  p0stman ships a live, anonymous, remote MCP server at https://p0stman.com/api/mcp (JSON-RPC 2.0 over HTTPS
+  POST, no session handshake required). It is advertised in llms.txt, agents.md, context.md and a root
+  /mcp.json manifest, and robots.txt explicitly allows /api/mcp. Probed 2026-09-19: initialize answered with
+  protocolVersion 2024-11-05 and serverInfo {name: "p0stman MCP Server", version: "1.0.0"}, capabilities
+  {tools: {}} only; tools/list returned five tools with full inputSchema (saved verbatim to
+  p0stman-com-tools-list.json). resources/list, prompts/list and ping all return -32601 Method not found, so
+  the server is tools-only. The read tools were exercised live (get_services returned the services JSON,
+  search_content returned an empty result set for "rate limit"); the two write tools - book_discovery_call
+  and submit_inquiry - were NOT called, because each creates a real enquiry with a real person. No OpenAPI
+  exists to bind these tools to, so there is no tool crosswalk; the same data is served as plain JSON at
+  /api/ai/context, /api/ai/services and /api/ai/portfolio. The official MCP registry
+  (registry.modelcontextprotocol.io) has no p0stman entry.
+deployment:
+  mode: remote
+  endpoint: https://p0stman.com/api/mcp
+  install: null
+  package: null
+  auth: none
+  verified: probed
+  evidence:
+  - {url: https://p0stman.com/api/mcp, method: POST initialize, status: 200, protocol_version: '2024-11-05'}
+  - {url: https://p0stman.com/api/mcp, method: POST tools/list, status: 200, result: 5 tools with inputSchema}
+  - {url: https://p0stman.com/api/mcp, method: POST tools/call get_services, status: 200, result: services JSON in a text content block}
+  - {url: https://p0stman.com/api/mcp, method: POST resources/list, status: 200, result: '-32601 Method not found'}
+  - {url: https://p0stman.com/api/mcp, method: POST prompts/list, status: 200, result: '-32601 Method not found'}
+  - {url: https://p0stman.com/api/mcp, method: GET, status: 200, result: JSON descriptor with name, version, endpoint and the five tool names}
+  - {url: https://p0stman.com/mcp.json, status: 200, result: root manifest naming the same endpoint and tools}
+  - {url: https://p0stman.com/.well-known/mcp.json, status: 404}
+  - {url: 'https://registry.modelcontextprotocol.io/v0/servers?search=p0stman', status: 200, result: '0 servers'}
+  cors: 'access-control-allow-origin: *; allow-methods GET, POST, OPTIONS; allow-headers Content-Type'
+  note: >-
+    Plain JSON responses (no SSE stream was returned even with Accept: text/event-stream); no Mcp-Session-Id
+    header is issued; the endpoint answers tools/list without a prior initialize.
+server:
+  name: p0stman MCP Server
+  version: 1.0.0
+  description: AI agent interface for p0stman product studio. Book discovery calls, browse services, view portfolio.
+  transport: http
+  url: https://p0stman.com/api/mcp
+  protocol_version: '2024-11-05'
+  capabilities:
+    tools: {}
+  methods_observed:
+    supported: [initialize, tools/list, tools/call]
+    not_found: [resources/list, prompts/list, ping]
+tool_count: 5
+tools_file: p0stman-com-tools-list.json
+tools:
+- name: book_discovery_call
+  category: engagement
+  side_effect: write
+  description: Book a free 30-minute discovery call with Paul at p0stman to discuss your project.
+  inputSchema:
+    type: object
+    properties:
+      name: {type: string, description: Your full name}
+      email: {type: string, description: Your email address}
+      project_description: {type: string, description: Brief description of your project or idea}
+      preferred_time: {type: string, description: Preferred time or timezone (optional)}
+    required: [name, email, project_description]
+  rest_equivalent: null
+- name: submit_inquiry
+  category: engagement
+  side_effect: write
+  description: Submit a project inquiry to p0stman. Use this for detailed enquiries or when the user wants to get in touch.
+  inputSchema:
+    type: object
+    properties:
+      name: {type: string, description: Your full name}
+      email: {type: string, description: Your email address}
+      message: {type: string, description: Your message or project description}
+      project_type: {type: string, description: Type of project (e.g. AI voice agent, MVP, web app)}
+    required: [name, email, message]
+  rest_equivalent: 'the /contact form, which agents.md says is annotated with data-mcp-tool="submit_inquiry" (WebMCP)'
+- name: get_services
+  category: catalogue
+  side_effect: read
+  description: Get list of p0stman services with pricing and timelines.
+  inputSchema:
+    type: object
+    properties:
+      category: {type: string, description: Filter by category (optional)}
+  rest_equivalent: GET https://p0stman.com/api/ai/services
+- name: get_portfolio
+  category: catalogue
+  side_effect: read
+  description: Get p0stman case studies and portfolio of shipped products.
+  inputSchema:
+    type: object
+    properties:
+      industry: {type: string, description: Filter by industry (optional)}
+  rest_equivalent: GET https://p0stman.com/api/ai/portfolio
+- name: search_content
+  category: catalogue
+  side_effect: read
+  description: Search p0stman guides, comparisons, and content pages.
+  inputSchema:
+    type: object
+    properties:
+      query: {type: string, description: Search query}
+    required: [query]
+  rest_equivalent: null
+webmcp:
+  claimed: true
+  source: https://p0stman.com/agents.md
+  note: >-
+    agents.md states the /contact form carries data-mcp-tool / data-mcp-field attributes and that tools are
+    registered imperatively via navigator.modelContext on page load (Chrome 146+). Recorded as the provider's
+    claim; not verified in a browser.

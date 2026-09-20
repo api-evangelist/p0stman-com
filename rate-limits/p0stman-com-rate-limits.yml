@@ -1,0 +1,20 @@
+generated: '2026-09-19'
+method: searched
+source: https://p0stman.com/agents.md
+docs:
+- https://p0stman.com/agents.md
+- https://p0stman.com/context.md
+- https://p0stman.com/llms.txt
+limit_count: 0
+summary: >-
+  No rate limit is published anywhere: agents.md, context.md and llms.txt do not mention limits, quotas or
+  throttling, and the site's own search_content tool returns an empty result set for "rate limit". No
+  RateLimit-*, X-RateLimit-* or Retry-After header was present on the anonymous 200 responses from POST
+  /api/mcp (tools/list, tools/call get_services) or the 400 from POST /api/agent on 2026-09-19. A 429 was not
+  provoked deliberately. Vercel hosts the endpoint, so platform-level abuse protection may exist, but the
+  provider states none - recorded as an honest zero.
+rate_limits: []
+headers:
+  observed: []
+  note: none returned on any probed response
+exhaustion_status: unknown (not observed, not documented)

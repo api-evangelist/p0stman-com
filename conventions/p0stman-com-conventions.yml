@@ -1,0 +1,76 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://p0stman.com/agents.md, https://p0stman.com/context.md, https://p0stman.com/llms.txt, the live
+  tools/list inputSchemas (mcp/p0stman-com-tools-list.json) and response headers observed on anonymous
+  POSTs to /api/mcp and /api/agent on 2026-09-19.
+description: >-
+  How p0stman's agent surface behaves across every call: anonymous JSON-RPC 2.0 over HTTPS POST for both MCP
+  and A2A, plain JSON GETs for the three /api/ai endpoints, no idempotency mechanism on the two writes, no
+  pagination, no request tracing, no versioning scheme beyond a "1.0.0" serverInfo string, JSON-RPC error
+  envelopes, and no rate-limit signalling. The write surface is two enquiry tools whose effect is a message
+  to a person; neither has a documented reversal.
+base_url: https://p0stman.com
+api_style: >-
+  JSON-RPC 2.0 over HTTPS POST at /api/mcp (MCP, protocol 2024-11-05) and /api/agent (A2A); plain JSON over
+  HTTPS GET at /api/ai/context, /api/ai/services, /api/ai/portfolio. All responses application/json; CORS *.
+authentication:
+  scheme: none - every surface is anonymous
+  docs: https://p0stman.com/agents.md
+  detail: authentication/p0stman-com-authentication.yml
+media_type: application/json
+versioning:
+  style: none
+  current: 'serverInfo.version 1.0.0 (MCP), card version "1.0" (A2A), mcp.json version 1.0.0'
+  note: No version appears in any path, header or parameter; no versioning or deprecation policy is published. See lifecycle/p0stman-com-lifecycle.yml.
+pagination:
+  supported: false
+  note: get_services, get_portfolio and search_content return the whole result set in one text content block; the only parameters are optional filters (category, industry) and the search query.
+field_expansion: null
+request_tracing:
+  supported: false
+  note: No request-id header is documented or returned; the only correlation is the JSON-RPC id, which the server drops (id null) on -32603 errors.
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  scope: []
+  detail: >-
+    Neither book_discovery_call nor submit_inquiry accepts an idempotency key, client request id or dedupe
+    token, and agents.md documents no replay semantics. A retried or duplicated call should be assumed to
+    create a second discovery-call request or enquiry to a real person. Agents should confirm with the user
+    before calling either write tool and never retry on timeout without checking.
+  docs: null
+reversibility:
+  grade: none
+  write_surface:
+  - book_discovery_call (requests a 30-minute call with the founder)
+  - submit_inquiry (sends a project enquiry)
+  - POST /api/agent message/send with the "book" skill (same effect as book_discovery_call)
+  reversal_operations: []
+  irreversible:
+  - {action: book_discovery_call, note: 'No cancel or reschedule tool exists; the only path back is a human email to hello@p0stman.com, which agents.md lists as the contact address.'}
+  - {action: submit_inquiry, note: 'No withdraw or delete tool exists; the privacy policy offers deletion of personal data by emailing privacy@p0stman.com, which is a data-subject right rather than an API reversal.'}
+  window: null
+  note: >-
+    Both writes are low-consequence (an email to a person, no money moves and nothing is provisioned), but
+    the rubric grades the presence of a reversal path and none is published. The read surface
+    (get_services, get_portfolio, search_content, the /api/ai GETs and the "inquire"/"portfolio" A2A skills)
+    is side-effect free.
+dry_run_mode:
+  supported: false
+  note: No test mode, sandbox flag or dry-run parameter is documented for either write tool.
+errors:
+  envelope: 'JSON-RPC 2.0 error object {code, message, data?}; MCP returns HTTP 200 on error, A2A returns HTTP 400'
+  ref: errors/p0stman-com-problem-types.yml
+rate_limits:
+  signalling: none observed - no RateLimit-*, X-RateLimit-* or Retry-After headers on any response
+  ref: rate-limits/p0stman-com-rate-limits.yml
+lifecycle:
+  ref: lifecycle/p0stman-com-lifecycle.yml
+agent_guidance_published:
+  source: https://p0stman.com/agents.md
+  notes:
+  - agents.md marks the MCP server "Recommended for AI Agents" and gives a complete JSON-RPC example per tool.
+  - llms.txt tells agents to "Use the MCP tool book_discovery_call to schedule directly via any AI agent".
+  - The provider's own Agent UX principles (https://p0stman.com/agent-ux/agent-ux-principles.md) recommend "read freely, confirm before acting" (tool-call transparency & write-confirm) - the rule an agent should apply to its two write tools.

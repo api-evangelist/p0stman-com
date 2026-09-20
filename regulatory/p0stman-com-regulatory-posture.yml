@@ -1,0 +1,76 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://p0stman.com/privacy
+signals:
+  data_subject_request:
+    url: https://p0stman.com/privacy
+    section: Your Rights
+    channel: privacy@p0stman.com
+    rights_named: [unsubscribe, deletion, access, correction, portability]
+    controller: Thrive Venture Labs Limited, registered in England and Wales (3rd Floor, 86-90 Paul Street, London EC2A 4NE per /contact)
+    regime_named: UK GDPR
+    evidence:
+    - source: https://p0stman.com/privacy
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: >-
+        "You can request deletion of your data by contacting us at privacy@p0stman.com. You have the right to
+        access, correct, or port your personal data." Page last updated August 19, 2025.
+    note: A published rights statement with a named channel; no stated response SLA, no dedicated /privacy/requests page (404) and no API.
+probed_absent:
+- signal: subprocessors
+  urls:
+  - {url: https://p0stman.com/legal/subprocessors, status: 404}
+  - {url: https://p0stman.com/legal/dpa, status: 404}
+  note: >-
+    The privacy policy names Supabase (data storage) and Vercel (hosting) as third-party services "contractually
+    required to protect your data and comply with UK GDPR" - two vendors in prose, not a dated subprocessor
+    table or a DPA, so not recorded as a subprocessors signal.
+- signal: sbom
+  urls:
+  - {url: https://p0stman.com/security/sbom, status: 404}
+  - {url: https://p0stman.com/security, status: 404}
+  note: No bill of materials published. Never derived - search only.
+- signal: support_lifetime
+  urls:
+  - {url: https://p0stman.com/changelog, status: 404}
+  note: No versioning or support-period statement anywhere on the site or in agents.md.
+- signal: accessibility_conformance
+  urls:
+  - {url: https://p0stman.com/accessibility, status: 404}
+  - {url: https://p0stman.com/accessibility/vpat, status: 404}
+  note: No accessibility statement or VPAT.
+- signal: ai_transparency
+  urls:
+  - {url: https://p0stman.com/ai/transparency, status: 404}
+  note: >-
+    The site is openly AI-native and its agent "Zero" is named as an AI assistant in the agent card, and the
+    footer names the models used ("Claude Sonnet 4.6") - marketing disclosure, not an Art. 50-style
+    transparency page. Not recorded.
+- signal: training_data_summary
+  urls: []
+  note: >-
+    Not applicable to what is published; agents.md states a policy on OTHERS training on p0stman content
+    ("Training data use: permitted with attribution"), which is a licensing preference, not a training-data
+    summary for a model p0stman ships.
+- signal: global_privacy_control
+  urls: [{url: https://p0stman.com/privacy, status: 200}]
+  note: The privacy policy says only "We use session storage for analytics purposes only. We do not use third-party advertising cookies." No GPC statement; honored is not set.
+- signal: data_residency
+  urls:
+  - {url: https://p0stman.com/docs/data-residency, status: 404}
+  note: The privacy policy names the hosting and storage vendors but states no region.
+- signal: incident_notification
+  urls: [{url: https://p0stman.com/legal/dpa, status: 404}]
+  note: No DPA or breach-notification SLA published.
+- signal: age_assurance
+  urls: []
+  note: No age signals; B2B services site.
+- signal: notice_and_action
+  urls: [{url: https://p0stman.com/legal/report-content, status: 404}]
+- signal: transparency_report
+  urls: [{url: https://p0stman.com/transparency, status: 404}]
+- signal: exit_assistance
+  urls: []
+  note: Not applicable - no hosted data service for a customer to exit; client work "belongs to the client upon full payment" per /terms.

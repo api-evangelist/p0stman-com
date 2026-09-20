@@ -1,0 +1,54 @@
+generated: '2026-09-19'
+method: probed
+format: jsonrpc
+source: >-
+  Read-only error probes against POST https://p0stman.com/api/mcp (unknown method, unknown tool, malformed
+  JSON, resources/list, prompts/list, ping) and POST https://p0stman.com/api/agent (tasks/get with no
+  message) on 2026-09-19. No docs error reference exists; agents.md documents the happy path only.
+description: >-
+  Both machine surfaces return JSON-RPC 2.0 error objects rather than HTTP problem details. The MCP server
+  returns HTTP 200 for every error and puts the signal in error.code; the A2A task endpoint returns HTTP 400
+  with the same envelope. Notably, an unknown tool name and malformed JSON both surface as -32603 Internal
+  error with the underlying JavaScript exception string in error.data (and id: null), rather than the
+  -32602 Invalid params / -32700 Parse error a strict client would expect - so an agent must read
+  error.data, not just error.code, to tell a typo from an outage.
+envelope:
+  shape: '{"jsonrpc":"2.0","id":<request id or null>,"error":{"code":<int>,"message":<string>,"data"?:<string>}}'
+  http_status_on_error:
+    mcp: 200 (always)
+    a2a: 400 (observed)
+  content_type: application/json
+problem_types:
+- code: -32601
+  title: Method not found
+  surface: mcp
+  http_status: 200
+  observed_for: [nonexistent/method, resources/list, prompts/list, ping]
+  example: '{"jsonrpc":"2.0","id":2,"error":{"code":-32601,"message":"Method not found"}}'
+  remediation: Only initialize, tools/list and tools/call are implemented; do not probe resources or prompts.
+- code: -32603
+  title: Internal error (unknown tool)
+  surface: mcp
+  http_status: 200
+  observed_for: ['tools/call with name no_such_tool']
+  example: '{"jsonrpc":"2.0","id":null,"error":{"code":-32603,"message":"Internal error","data":"Error: Unknown tool: no_such_tool"}}'
+  remediation: 'Check error.data for "Unknown tool:" and re-read tools/list; the request id is dropped (id: null), so correlate by order not by id.'
+  note: A strict server would return -32602 Invalid params here.
+- code: -32603
+  title: Internal error (parse failure)
+  surface: mcp
+  http_status: 200
+  observed_for: [malformed JSON body]
+  example: '{"jsonrpc":"2.0","id":null,"error":{"code":-32603,"message":"Internal error","data":"SyntaxError: Expected property name or ''}'' in JSON at position 1 (line 1 column 2)"}}'
+  remediation: Send a valid JSON-RPC 2.0 object; the server does not return -32700 Parse error.
+- code: -32602
+  title: Invalid params (missing task text)
+  surface: a2a
+  http_status: 400
+  observed_for: ['tasks/get with params {id}']
+  example: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"Missing task text in params.message.parts[0].text"}}'
+  remediation: Send a message/send-shaped request whose params.message.parts[0].text carries the user text; task lookup is not supported.
+not_observed:
+- tools/call success shape for the write tools (book_discovery_call, submit_inquiry) - not exercised, each creates a real enquiry.
+- Validation errors for missing required tool arguments - not exercised for the same reason.
+- 429 / rate-limit responses - none provoked; see rate-limits/p0stman-com-rate-limits.yml.

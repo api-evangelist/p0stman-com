@@ -1,0 +1,116 @@
+generated: '2026-09-19'
+method: probed
+source: live GET of the named /.well-known/ path list on every host this record knows (p0stman.com, www.p0stman.com - the MCP server, the A2A task endpoint and the JSON context endpoints all live on the registrable domain, so there is no separate API, docs or MCP host to probe)
+hit_count: 4
+note: >-
+  Two real documents hit: the A2A agent card at the canonical /.well-known/agent-card.json and at the
+  legacy /.well-known/agent.json, byte-identical (ETag cc05f050a98844045d088bfb6708cae4) on both hosts;
+  the body is saved to a2a/p0stman-com-agent-card.json. Every other named discovery path - security.txt,
+  openid-configuration, oauth-authorization-server, oauth-protected-resource, api-catalog, ai-plugin.json,
+  ucp.json, acp.json, aauth-resource.json, apis.json, /apis.json, /apis.yml - returned the site's real 404
+  (HTML 404 page with status 404, not a soft-200). The negative-control path returned 404 on each host, so
+  the hits are real routes and not a path-echoing catch-all. The provider's MCP manifest is at the root
+  (/mcp.json, 200) rather than at /.well-known/mcp.json (404), and is indexed in mcp/p0stman-com-mcp.yml.
+  No security.txt is served, so no SecurityTxt pointer is emitted; the MCP endpoint is anonymous, so the
+  absence of RFC 8414 / RFC 9728 metadata is consistent with the surface rather than a gap in it.
+hosts:
+- host: https://p0stman.com
+  path_echo_control: passed
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/p0stman-com-agent-card.json
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/p0stman-com-agent-card.json
+    note: legacy pre-0.3 path; byte-identical to agent-card.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+    note: the MCP manifest is served at the root /mcp.json (200) instead
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/p0stman-negative-control-7f3ab91c.json
+    status: 404
+    control: true
+- host: https://www.p0stman.com
+  path_echo_control: passed
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/p0stman-com-agent-card.json
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/p0stman-com-agent-card.json
+    note: legacy pre-0.3 path; byte-identical to agent-card.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/p0stman-negative-control-7f3ab91c.json
+    status: 404
+    control: true
+root_discovery_files:
+  note: Not /.well-known/ documents, recorded here because they are the provider's own discovery layer and each was fetched live.
+  documents:
+  - {path: /llms.txt, status: 200, content_type: text/plain, file: ../llms/p0stman-com-llms.txt, last_modified: '2026-09-10'}
+  - {path: /agents.md, status: 200, content_type: text/markdown, file: ../llms/p0stman-com-agents.md}
+  - {path: /context.md, status: 200, content_type: text/markdown}
+  - {path: /mcp.json, status: 200, content_type: application/json, file: ../mcp/p0stman-com-mcp-manifest.json}
+  - {path: /robots.txt, status: 200, content_type: text/plain, note: 'Allow: /api/mcp and /api/ai/; named allows for GPTBot, ClaudeBot, anthropic-ai, PerplexityBot, Google-Extended and 14 other AI crawlers; Disallow on /api/zero-chat, /api/clawos-*, /api/admin, /api/cron, /api/track'}
+  - {path: /sitemap.xml, status: 200, content_type: application/xml, note: 185 URLs}

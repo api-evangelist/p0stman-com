@@ -1,0 +1,36 @@
+generated: '2026-09-19'
+method: searched
+source: https://p0stman.com/agents.md
+docs:
+- https://p0stman.com/agents.md
+- https://p0stman.com/llms.txt
+- https://p0stman.com/pricing
+- https://p0stman.com/services
+plan_count: 0
+currency: null
+model: >-
+  Free, anonymous, unmetered agent surface with no API plans; the company's published prices are for its
+  services (fixed-price product builds and retainers), not for API access.
+summary: >-
+  There is no API pricing to record: the MCP server, the A2A endpoint and the /api/ai JSON endpoints are
+  anonymous and no tier, quota, key or paid plan is published for them (plan_count 0). What p0stman does
+  publish, and what its own get_services tool returns, is service pricing - "Projects from £5,000", AI
+  Automation from £5,000 (1-3 weeks), AI Voice Agents from £5,000 (6-10 days), AI Operations from £8,000
+  (2-4 weeks), MVP Launch from £5,000, Agentic Web Readiness from £1,500 (AgentReady Audit) / £5,000
+  (Agentic Rebuild), Fractional CTO £3,000-£5,000/month, retainers £3,000-£5,000/month - on /services,
+  /pricing and in llms.txt. That is the company's price list, recorded here for context; it is not an API
+  plan and is not counted.
+plans: []
+free_tier: true
+paid_plans_published: false
+enterprise_contact: null
+service_pricing_reference:
+  note: Not API plans. Verbatim from https://p0stman.com/llms.txt (Last updated 2026-06-19) and https://p0stman.com/api/ai/services.
+  currency: GBP
+  items:
+  - {service: AI Automation, price_from: 5000, timeline: 1-3 weeks}
+  - {service: AI Voice Agents, price_from: 5000, timeline: 6-10 days}
+  - {service: AI Operations, price_from: 8000, timeline: 2-4 weeks}
+  - {service: MVP Launch, price_from: 5000, timeline: 6 days - 3 weeks}
+  - {service: Agentic Web Readiness, price_from: 1500, timeline: 1-2 weeks}
+  - {service: Fractional CTO, price: '£3,000-£5,000/month', commitment: 12-month}

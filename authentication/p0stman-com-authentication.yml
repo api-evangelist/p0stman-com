@@ -1,0 +1,47 @@
+generated: '2026-09-19'
+method: probed
+docs: https://p0stman.com/agents.md
+source: >-
+  https://p0stman.com/.well-known/agent-card.json (authentication.schemes), anonymous POSTs to
+  https://p0stman.com/api/mcp and https://p0stman.com/api/agent, anonymous GETs to /api/ai/context,
+  /api/ai/services and /api/ai/portfolio, https://p0stman.com/agents.md and the /.well-known/ probe - all
+  2026-09-19. derive-authentication.py was not run: there is no OpenAPI to derive from.
+summary: >-
+  Every public machine surface p0stman exposes is anonymous. The MCP server answered initialize, tools/list
+  and a tools/call with no credential and no WWW-Authenticate challenge; the A2A card declares
+  authentication.schemes ["None"] and the task endpoint accepted an anonymous JSON-RPC POST; the three
+  /api/ai JSON endpoints return 200 to a bare GET; agents.md documents no key, token or sign-up anywhere.
+  There is no OAuth authorization server, no OpenID configuration, no protected-resource metadata and no
+  developer sign-up - consistent with a surface whose only writes are "send us an enquiry". The two write
+  tools identify the caller by the name and email supplied in the tool arguments, not by any credential.
+schemes:
+- id: none
+  type: none
+  applies_to:
+    mcp: [initialize, tools/list, tools/call book_discovery_call, tools/call submit_inquiry, tools/call get_services, tools/call get_portfolio, tools/call search_content]
+    a2a: [GET /api/agent (card), POST /api/agent (JSON-RPC)]
+    json: [GET /api/ai/context, GET /api/ai/services, GET /api/ai/portfolio]
+  detail: >-
+    No Authorization header, API key, cookie or session is required or documented. CORS is open
+    (access-control-allow-origin: *). Caller identity for the write tools is the name/email in the
+    arguments, which p0stman receives as an enquiry.
+  observed:
+  - {url: https://p0stman.com/api/mcp, method: POST tools/list, status: 200, www_authenticate: null}
+  - {url: https://p0stman.com/api/mcp, method: POST tools/call get_services, status: 200}
+  - {url: https://p0stman.com/api/agent, method: POST tasks/get, status: 400, note: JSON-RPC -32602 shape error - a validation failure, not an auth challenge}
+  - {url: https://p0stman.com/api/ai/context, method: GET, status: 200}
+oauth:
+  authorization_server_metadata: {url: https://p0stman.com/.well-known/oauth-authorization-server, status: 404}
+  protected_resource_metadata: {url: https://p0stman.com/.well-known/oauth-protected-resource, status: 404}
+  openid_configuration: {url: https://p0stman.com/.well-known/openid-configuration, status: 404}
+  dynamic_client_registration: false
+  scopes: none - see conformance; no scopes artifact is written because no OAuth surface exists
+a2a_card_declaration:
+  field: authentication.schemes
+  value: ['None']
+  note: pre-0.3 field name; A2A 1.0.0 uses securitySchemes / security
+gated_surfaces:
+  note: >-
+    robots.txt disallows /api/zero-chat, /api/clawos-chat, /api/clawos-poll, /api/gemini-session, /api/admin,
+    /api/cron, /api/track and /api/indexnow. These back the site's own chat/voice widgets and operations and
+    are not published for third parties; they were not probed.

@@ -1,0 +1,31 @@
+{
+  "name": "p0stman",
+  "description": "AI-native product studio. Book discovery calls, browse services, view portfolio of shipped products.",
+  "version": "1.0.0",
+  "endpoint": "https://p0stman.com/api/mcp",
+  "protocol": "json-rpc-2.0",
+  "tools": [
+    {
+      "name": "book_discovery_call",
+      "description": "Book a free 30-minute discovery call with Paul at p0stman to discuss your project."
+    },
+    {
+      "name": "submit_inquiry",
+      "description": "Submit a project inquiry to p0stman."
+    },
+    {
+      "name": "get_services",
+      "description": "Get list of p0stman services with pricing and timelines."
+    },
+    {
+      "name": "get_portfolio",
+      "description": "Get p0stman case studies and portfolio of shipped products."
+    },
+    {
+      "name": "search_content",
+      "description": "Search p0stman guides, comparisons, and content pages."
+    }
+  ],
+  "contact": "hello@p0stman.com",
+  "website": "https://p0stman.com"
+}

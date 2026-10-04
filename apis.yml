@@ -10,6 +10,21 @@ description: >-
   /api/ai/portfolio, plus llms.txt, agents.md, context.md and a root mcp.json manifest. No OpenAPI, SDK,
   OAuth surface or developer sign-up is published - the whole API is free, anonymous and read-mostly, with two
   write tools that book a discovery call or send an enquiry. Not the Postman API platform.
+deliveryModel:
+  model: saas
+  license_evidence:
+    not_product:
+    - paulgosnell/zero-agent
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: low
+  source:
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 image: https://p0stman.com/icon-512.png
 url: https://raw.githubusercontent.com/api-evangelist/p0stman-com/refs/heads/main/apis.yml
 x-type: company

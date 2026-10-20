@@ -5,19 +5,18 @@ source: https://p0stman.com/api/mcp
 manifest_source: https://p0stman.com/mcp.json
 docs: https://p0stman.com/agents.md
 llms_source: https://p0stman.com/llms.txt
-description: >-
-  p0stman ships a live, anonymous, remote MCP server at https://p0stman.com/api/mcp (JSON-RPC 2.0 over HTTPS
-  POST, no session handshake required). It is advertised in llms.txt, agents.md, context.md and a root
-  /mcp.json manifest, and robots.txt explicitly allows /api/mcp. Probed 2026-09-19: initialize answered with
-  protocolVersion 2024-11-05 and serverInfo {name: "p0stman MCP Server", version: "1.0.0"}, capabilities
-  {tools: {}} only; tools/list returned five tools with full inputSchema (saved verbatim to
-  p0stman-com-tools-list.json). resources/list, prompts/list and ping all return -32601 Method not found, so
-  the server is tools-only. The read tools were exercised live (get_services returned the services JSON,
-  search_content returned an empty result set for "rate limit"); the two write tools - book_discovery_call
+description: 'p0stman ships a live, anonymous, remote MCP server at https://p0stman.com/api/mcp (JSON-RPC
+  2.0 over HTTPS POST, no session handshake required). It is advertised in llms.txt, agents.md, context.md
+  and a root /mcp.json manifest, and robots.txt explicitly allows /api/mcp. Probed 2026-09-19: initialize
+  answered with protocolVersion 2024-11-05 and serverInfo {name: "p0stman MCP Server", version: "1.0.0"},
+  capabilities {tools: {}} only; tools/list returned five tools with full inputSchema (saved verbatim
+  to p0stman-com-tools-list.json). resources/list, prompts/list and ping all return -32601 Method not
+  found, so the server is tools-only. The read tools were exercised live (get_services returned the services
+  JSON, search_content returned an empty result set for "rate limit"); the two write tools - book_discovery_call
   and submit_inquiry - were NOT called, because each creates a real enquiry with a real person. No OpenAPI
-  exists to bind these tools to, so there is no tool crosswalk; the same data is served as plain JSON at
-  /api/ai/context, /api/ai/services and /api/ai/portfolio. The official MCP registry
-  (registry.modelcontextprotocol.io) has no p0stman entry.
+  exists to bind these tools to, so there is no tool crosswalk; the same data is served as plain JSON
+  at /api/ai/context, /api/ai/services and /api/ai/portfolio. The official MCP registry (registry.modelcontextprotocol.io)
+  has no p0stman entry.'
 deployment:
   mode: remote
   endpoint: https://p0stman.com/api/mcp
@@ -26,31 +25,62 @@ deployment:
   auth: none
   verified: probed
   evidence:
-  - {url: https://p0stman.com/api/mcp, method: POST initialize, status: 200, protocol_version: '2024-11-05'}
-  - {url: https://p0stman.com/api/mcp, method: POST tools/list, status: 200, result: 5 tools with inputSchema}
-  - {url: https://p0stman.com/api/mcp, method: POST tools/call get_services, status: 200, result: services JSON in a text content block}
-  - {url: https://p0stman.com/api/mcp, method: POST resources/list, status: 200, result: '-32601 Method not found'}
-  - {url: https://p0stman.com/api/mcp, method: POST prompts/list, status: 200, result: '-32601 Method not found'}
-  - {url: https://p0stman.com/api/mcp, method: GET, status: 200, result: JSON descriptor with name, version, endpoint and the five tool names}
-  - {url: https://p0stman.com/mcp.json, status: 200, result: root manifest naming the same endpoint and tools}
-  - {url: https://p0stman.com/.well-known/mcp.json, status: 404}
-  - {url: 'https://registry.modelcontextprotocol.io/v0/servers?search=p0stman', status: 200, result: '0 servers'}
+  - url: https://p0stman.com/api/mcp
+    method: POST initialize
+    status: 200
+    protocol_version: '2024-11-05'
+  - url: https://p0stman.com/api/mcp
+    method: POST tools/list
+    status: 200
+    result: 5 tools with inputSchema
+  - url: https://p0stman.com/api/mcp
+    method: POST tools/call get_services
+    status: 200
+    result: services JSON in a text content block
+  - url: https://p0stman.com/api/mcp
+    method: POST resources/list
+    status: 200
+    result: -32601 Method not found
+  - url: https://p0stman.com/api/mcp
+    method: POST prompts/list
+    status: 200
+    result: -32601 Method not found
+  - url: https://p0stman.com/api/mcp
+    method: GET
+    status: 200
+    result: JSON descriptor with name
+    version: null
+    endpoint and the five tool names: null
+  - url: https://p0stman.com/mcp.json
+    status: 200
+    result: root manifest naming the same endpoint and tools
+  - url: https://p0stman.com/.well-known/mcp.json
+    status: 404
+  - url: https://registry.modelcontextprotocol.io/v0/servers?search=p0stman
+    status: 200
+    result: 0 servers
   cors: 'access-control-allow-origin: *; allow-methods GET, POST, OPTIONS; allow-headers Content-Type'
-  note: >-
-    Plain JSON responses (no SSE stream was returned even with Accept: text/event-stream); no Mcp-Session-Id
-    header is issued; the endpoint answers tools/list without a prior initialize.
+  note: 'Plain JSON responses (no SSE stream was returned even with Accept: text/event-stream); no Mcp-Session-Id
+    header is issued; the endpoint answers tools/list without a prior initialize.'
 server:
   name: p0stman MCP Server
   version: 1.0.0
-  description: AI agent interface for p0stman product studio. Book discovery calls, browse services, view portfolio.
+  description: AI agent interface for p0stman product studio. Book discovery calls, browse services, view
+    portfolio.
   transport: http
   url: https://p0stman.com/api/mcp
   protocol_version: '2024-11-05'
   capabilities:
     tools: {}
   methods_observed:
-    supported: [initialize, tools/list, tools/call]
-    not_found: [resources/list, prompts/list, ping]
+    supported:
+    - initialize
+    - tools/list
+    - tools/call
+    not_found:
+    - resources/list
+    - prompts/list
+    - ping
 tool_count: 5
 tools_file: p0stman-com-tools-list.json
 tools:
@@ -61,25 +91,51 @@ tools:
   inputSchema:
     type: object
     properties:
-      name: {type: string, description: Your full name}
-      email: {type: string, description: Your email address}
-      project_description: {type: string, description: Brief description of your project or idea}
-      preferred_time: {type: string, description: Preferred time or timezone (optional)}
-    required: [name, email, project_description]
+      name:
+        type: string
+        description: Your full name
+      email:
+        type: string
+        description: Your email address
+      project_description:
+        type: string
+        description: Brief description of your project or idea
+      preferred_time:
+        type: string
+        description: Preferred time or timezone (optional)
+    required:
+    - name
+    - email
+    - project_description
   rest_equivalent: null
 - name: submit_inquiry
   category: engagement
   side_effect: write
-  description: Submit a project inquiry to p0stman. Use this for detailed enquiries or when the user wants to get in touch.
+  description: Submit a project inquiry to p0stman. Use this for detailed enquiries or when the user wants
+    to get in touch.
   inputSchema:
     type: object
     properties:
-      name: {type: string, description: Your full name}
-      email: {type: string, description: Your email address}
-      message: {type: string, description: Your message or project description}
-      project_type: {type: string, description: Type of project (e.g. AI voice agent, MVP, web app)}
-    required: [name, email, message]
-  rest_equivalent: 'the /contact form, which agents.md says is annotated with data-mcp-tool="submit_inquiry" (WebMCP)'
+      name:
+        type: string
+        description: Your full name
+      email:
+        type: string
+        description: Your email address
+      message:
+        type: string
+        description: Your message or project description
+      project_type:
+        type: string
+        description: Type of project (e.g. AI voice agent
+        MVP: null
+        web app): null
+    required:
+    - name
+    - email
+    - message
+  rest_equivalent: the /contact form, which agents.md says is annotated with data-mcp-tool="submit_inquiry"
+    (WebMCP)
 - name: get_services
   category: catalogue
   side_effect: read
@@ -87,7 +143,9 @@ tools:
   inputSchema:
     type: object
     properties:
-      category: {type: string, description: Filter by category (optional)}
+      category:
+        type: string
+        description: Filter by category (optional)
   rest_equivalent: GET https://p0stman.com/api/ai/services
 - name: get_portfolio
   category: catalogue
@@ -96,7 +154,9 @@ tools:
   inputSchema:
     type: object
     properties:
-      industry: {type: string, description: Filter by industry (optional)}
+      industry:
+        type: string
+        description: Filter by industry (optional)
   rest_equivalent: GET https://p0stman.com/api/ai/portfolio
 - name: search_content
   category: catalogue
@@ -105,13 +165,42 @@ tools:
   inputSchema:
     type: object
     properties:
-      query: {type: string, description: Search query}
-    required: [query]
+      query:
+        type: string
+        description: Search query
+    required:
+    - query
   rest_equivalent: null
 webmcp:
   claimed: true
   source: https://p0stman.com/agents.md
-  note: >-
-    agents.md states the /contact form carries data-mcp-tool / data-mcp-field attributes and that tools are
-    registered imperatively via navigator.modelContext on page load (Chrome 146+). Recorded as the provider's
-    claim; not verified in a browser.
+  note: agents.md states the /contact form carries data-mcp-tool / data-mcp-field attributes and that
+    tools are registered imperatively via navigator.modelContext on page load (Chrome 146+). Recorded
+    as the provider's claim; not verified in a browser.
+tool_quality:
+  tool_count: 5
+  tokens_total: 479
+  tokens_per_tool_median: 62
+  heavy_tools: []
+  heavy_tool_count: 0
+  params_total: 11
+  params_undescribed: 0
+  params_described_pct: 100.0
+  tools_with_undescribed_params: 0
+  tools_annotated: 0
+  annotated_pct: 0.0
+  state_changing_unhinted:
+  - book_discovery_call
+  - submit_inquiry
+  tools_missing_schema: 0
+  short_descriptions: 0
+  duplicate_descriptions: 0
+  duplicate_names: 0
+  nonportable_names: []
+  output_schema_count: 0
+  token_estimate: chars/3.6 of each compact tool definition
+  source: mcp/p0stman-com-tools-list.json
+  measured: '2026-10-20'
+  scored: false
+  note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
+    from Glimind's agent-readiness audit.

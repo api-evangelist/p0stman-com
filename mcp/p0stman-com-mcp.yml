@@ -85,9 +85,9 @@ tool_count: 5
 tools_file: p0stman-com-tools-list.json
 tools:
 - name: book_discovery_call
+  description: Book a free 30-minute discovery call with Paul at p0stman to discuss your project.
   category: engagement
   side_effect: write
-  description: Book a free 30-minute discovery call with Paul at p0stman to discuss your project.
   inputSchema:
     type: object
     properties:
@@ -109,10 +109,10 @@ tools:
     - project_description
   rest_equivalent: null
 - name: submit_inquiry
-  category: engagement
-  side_effect: write
   description: Submit a project inquiry to p0stman. Use this for detailed enquiries or when the user wants
     to get in touch.
+  category: engagement
+  side_effect: write
   inputSchema:
     type: object
     properties:
@@ -137,9 +137,9 @@ tools:
   rest_equivalent: the /contact form, which agents.md says is annotated with data-mcp-tool="submit_inquiry"
     (WebMCP)
 - name: get_services
+  description: Get list of p0stman services with pricing and timelines.
   category: catalogue
   side_effect: read
-  description: Get list of p0stman services with pricing and timelines.
   inputSchema:
     type: object
     properties:
@@ -148,9 +148,9 @@ tools:
         description: Filter by category (optional)
   rest_equivalent: GET https://p0stman.com/api/ai/services
 - name: get_portfolio
+  description: Get p0stman case studies and portfolio of shipped products.
   category: catalogue
   side_effect: read
-  description: Get p0stman case studies and portfolio of shipped products.
   inputSchema:
     type: object
     properties:
@@ -159,9 +159,9 @@ tools:
         description: Filter by industry (optional)
   rest_equivalent: GET https://p0stman.com/api/ai/portfolio
 - name: search_content
+  description: Search p0stman guides, comparisons, and content pages.
   category: catalogue
   side_effect: read
-  description: Search p0stman guides, comparisons, and content pages.
   inputSchema:
     type: object
     properties:
@@ -204,3 +204,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 5

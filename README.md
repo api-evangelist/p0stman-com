@@ -64,5 +64,113 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-p0stman is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://p0stman.com/
+p0stman is an AI-native product studio operated by Thrive Venture Labs Ltd (Norfolk and London, UK), founded by Paul Gosnell. It builds AI voice agents, AI automation, operations command centres, rapid MVPs and "agentic web readiness" rebuilds for clients at fixed prices from £1,500-£8,000, and it uses its own site as the demonstration: p0stman.com serves a live anonymous MCP server at /api/mcp (five tools, JSON-RPC 2.0, protocol 2024-11-05), an A2A agent card for its assistant "Zero" at /.well-known/agent-card.json with a task endpoint at /api/agent, machine-readable JSON at /api/ai/context, /api/ai/services and /api/ai/portfolio, plus llms.txt, agents.md, context.md and a root mcp.json manifest. No OpenAPI, SDK, OAuth surface or developer sign-up is published - the whole API is free, anonymous and read-mostly, with two write tools that book a discovery call or send an enquiry. Not the Postman API platform.
+
+**Areas:** AI Agents · MCP · A2A · Agentic Web · Voice AI · AI Automation · Product Studio · Software Development · Consulting · United Kingdom
+
+## p0stman on APIs.io
+
+Everything profiled for p0stman is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/p0stman-com/](https://apis.io/providers/p0stman-com/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [p0stman MCP Server](https://apis.io/apis/p0stman-com/p0stman-mcp-server/) — Live, anonymous, remote Model Context Protocol server at https://p0stman.com/api/mcp (JSON-RPC 2.0 over HTTPS POST, protocol 2024-11-05, tools primitive…
+- [Zero A2A Agent](https://apis.io/apis/p0stman-com/zero-a2a-agent/) — p0stman's agent-to-agent surface: an A2A agent card for "Zero" served at /.well-known/agent-card.json (and the legacy /.well-known/agent.json) on…
+- [p0stman AI Context API](https://apis.io/apis/p0stman-com/p0stman-ai-context-api/) — Three anonymous JSON endpoints documented in agents.md for agents that do not speak MCP: GET /api/ai/context (company, services, case_studies, contact,…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [p0stman MCP Server](https://apis.io/servers/p0stman-com/p0stman-mcp-server/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [P0Stman Com Authentication](https://apis.io/security/p0stman-com/p0stman-com-authentication/)
+- [P0Stman Com Domain Security](https://apis.io/security/p0stman-com/p0stman-com-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [P0Stman Com Plans Pricing](https://apis.io/plans/p0stman-com/p0stman-com-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [P0Stman Com Rate Limits](https://apis.io/rate-limits/p0stman-com/p0stman-com-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://p0stman.com/)
+- [Documentation](https://p0stman.com/agents.md)
+- [Getting started](https://p0stman.com/agents.md)
+- [Pricing](https://p0stman.com/pricing)
+- [Support](https://p0stman.com/contact)
+- [Blog](https://p0stman.com/guides)
+- [Terms of service](https://p0stman.com/terms)
+- [Privacy policy](https://p0stman.com/privacy)
+
+## API Evangelist rating
+
+**Kin Score 27.4** — thin · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 81.7 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 5.3 |
+| Developer ergonomics | 42.3 |
+| Access clarity | 31.6 |
+
+**Agent readiness 13.7** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | flavored (partial credit) |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 28.4** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/p0stman-com/](https://apis.io/providers/p0stman-com/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for p0stman: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/p0stman-com/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
